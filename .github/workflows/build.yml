@@ -51,6 +51,8 @@ jobs:
           haxelib list
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
+      - name: Copy Week 7 Files
+        run: cp -rf ./Week7Assets/* ./assets
       - name: Compile
         run: haxelib run lime build Project.xml linux --app-version="4.0.0-${{ github.run_id}}"
       - name: Publish Artifact
@@ -58,8 +60,6 @@ jobs:
         with:
           name: linuxBuild
           path: 'export/release/linux/bin' 
-      - name: Copy Week 7 Files
-        run: cp -rf ./Week7Assets/* ./export/release/linux/bin/assets
       - name: Publish Artifact
         uses: actions/upload-artifact@v2
         with:
@@ -73,12 +73,15 @@ jobs:
         with:
           name: html5Build
           path: export/release/html5/bin
-      - name: Copy Week 7 Files
-        run: cp -rf ./Week7Assets/* ./export/release/html5/bin/assets
       - name: Publish Artifact
         uses: actions/upload-artifact@v2
         with:
           name: html5Week7Build
+          path: export/release/html5/bin
+      - name: Upload artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: github-pages
           path: export/release/html5/bin
   buildWindows:
     runs-on: windows-latest
